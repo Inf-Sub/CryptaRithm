@@ -1,4 +1,5 @@
 from itertools import permutations
+import time
 
 def solve_cryptarithmetic(puzzle_str):
     # Разделяем выражение на левую и правую части
@@ -54,42 +55,55 @@ def solve_cryptarithmetic(puzzle_str):
 
     return None
 
-puzzles = [
-    'НИТКА+НИТКА=ТКАНЬ',
-    'ДЕТАЛЬ+ДЕТАЛЬ=ИЗДЕЛИЕ',
-    'ИЗДЕЛИЕ-ДЕТАЛЬ=ДЕТАЛЬ',
-    'ВАГОН+ВАГОН=СОСТАВ',
-    'ЛЮБА+ЛЮБИТ=АРБУЗЫ',
-    'АРБУЗЫ-ЛЮБИТ=ЛЮБА',
-    'АРБУЗЫ-ЛЮБА=ЛЮБИТ',
-    'ОДИН+ОДИН=МНОГО',
-    'МНОГО-ОДИН=ОДИН',
-    'СИНИЦА+СИНИЦА=ПТИЧКИ'
-]
-
-for puzzle in puzzles:
-    solution = solve_cryptarithmetic(puzzle)
-    if solution:
-        # Разделяем левую часть на слова
-        puzzle_left_side, puzzle_right_side = puzzle.split('=')
-        puzzle_left_side = puzzle_left_side.strip()
-        puzzle_right_side = puzzle_right_side.strip()
-
-        # Определяем знак и разделяем левую часть на переменные
-        if '+' in puzzle_left_side:
-            variable_left, variable_right = puzzle_left_side.split('+')
-            sign = '+'
+def main(list_puzzles):
+    for puzzle in list_puzzles:
+        start_time = time.time()
+        solution = solve_cryptarithmetic(puzzle)
+        end_time = time.time()
+        elapsed_time = end_time - start_time
+        
+        if solution:
+            # Разделяем левую часть на слова
+            puzzle_left_side, puzzle_right_side = puzzle.split('=')
+            puzzle_left_side = puzzle_left_side.strip()
+            puzzle_right_side = puzzle_right_side.strip()
+            
+            # Определяем знак и разделяем левую часть на переменные
+            if '+' in puzzle_left_side:
+                variable_left, variable_right = puzzle_left_side.split('+')
+                sign = '+'
+            else:
+                variable_left, variable_right = puzzle_left_side.split('-')
+                sign = '-'
+            
+            # Получаем числовые значения для переменных
+            variable_left_value = ''.join(str(solution[char]) for char in variable_left.strip())
+            variable_right_value = ''.join(str(solution[char]) for char in variable_right.strip())
+            result_value = ''.join(str(solution[char]) for char in puzzle_right_side.strip())
+            
+            # Выводим результат
+            if sign == '+':
+                print(f'{puzzle}: {variable_left_value} + {variable_right_value} = {result_value}')
+            else:
+                print(f'{puzzle}: {variable_left_value} - {variable_right_value} = {result_value}')
         else:
-            variable_left, variable_right = puzzle_left_side.split('-')
-            sign = '-'
+            print(f'{puzzle}: No solution found')
+        
+        print(f'Time taken to solve: {elapsed_time:.4f} seconds\n')
 
-        # Получаем числовые значения для переменных
-        variable_left_value = ''.join(str(solution[char]) for char in variable_left.strip())
-        variable_right_value = ''.join(str(solution[char]) for char in variable_right.strip())
-        result_value = ''.join(str(solution[char]) for char in puzzle_right_side.strip())
 
-        # Выводим результат
-        if sign == '+':
-            print(f'{puzzle}: {variable_left_value} + {variable_right_value} = {result_value}')
-        else:
-            print(f'{puzzle}: {variable_left_value} - {variable_right_value} = {result_value}')
+if __name__ == '__main__':
+    puzzles = [
+        'НИТКА+НИТКА=ТКАНЬ',
+        'ДЕТАЛЬ+ДЕТАЛЬ=ИЗДЕЛИЕ',
+        'ИЗДЕЛИЕ-ДЕТАЛЬ=ДЕТАЛЬ',
+        'ВАГОН+ВАГОН=СОСТАВ',
+        'ЛЮБА+ЛЮБИТ=АРБУЗЫ',
+        'АРБУЗЫ-ЛЮБИТ=ЛЮБА',
+        'АРБУЗЫ-ЛЮБА=ЛЮБИТ',
+        'ОДИН+ОДИН=МНОГО',
+        'МНОГО-ОДИН=ОДИН',
+        'СИНИЦА+СИНИЦА=ПТИЧКИ'
+    ]
+
+    main(puzzles)
