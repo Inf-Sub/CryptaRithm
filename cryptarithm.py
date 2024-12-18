@@ -56,6 +56,7 @@ def solve_cryptarithmetic(puzzle_str):
     return None
 
 def main(list_puzzles):
+    start_time_full = time.time()
     for puzzle in list_puzzles:
         start_time = time.time()
         solution = solve_cryptarithmetic(puzzle)
@@ -89,7 +90,11 @@ def main(list_puzzles):
         else:
             print(f'{puzzle}: No solution found')
         
-        print(f'Time taken to solve: {elapsed_time:.4f} seconds\n')
+        print(f'Time taken to solve: {elapsed_time:.2f} seconds\n')
+    
+    end_time_full = time.time()
+    elapsed_time_full = end_time_full - start_time_full
+    print(f'Time required to solve all tasks: {elapsed_time_full:.2f} seconds\n')
 
 
 if __name__ == '__main__':
